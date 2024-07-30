@@ -1,13 +1,16 @@
 import logging
-from flask import Flask, render_template, request, abort, redirect, url_for
+from flask import Flask, flash, render_template, request, abort, redirect, url_for
 from pathlib import PurePath, Path
 from werkzeug.utils import secure_filename
 from markupsafe import escape
+import secrets
+secrets.token_hex()
 
 
 
 app = Flask(__name__)
 logger = logging.getLogger(__name__)
+app.secret_key = b'5f214cacbd30c2ae4784b520f17912ae0d5d8c16ae98128e3f549546221265e4'
 
 
 @app.route('/')
@@ -114,6 +117,18 @@ def quadro():
 @app.route('/quadro/<int:number>')
 def quadro_result(number):
     return f'Квадрат числа = {number}'
+
+@app.route('/form', methods=['GET', 'POST'])
+def form():
+    if request.method == 'POST':
+        # Проверка данных формы
+        if not request.form['name']:
+            flash('Введите имя!', 'danger')
+            return redirect(url_for('form'))
+            # Обработка данных формы
+        flash('Форма успешно отправлена!', 'success')
+        return redirect(url_for('form'))
+    return render_template('form.html')
 
 
 if __name__ == '__main__':
