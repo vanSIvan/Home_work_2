@@ -1,5 +1,5 @@
 import logging
-from flask import Flask, render_template, request, abort
+from flask import Flask, render_template, request, abort, redirect, url_for
 from pathlib import PurePath, Path
 from werkzeug.utils import secure_filename
 from markupsafe import escape
@@ -106,6 +106,14 @@ def page_not_found(e):
         }
     return render_template('403.html', **context), 403
 
+@app.route('/quadro', methods=['GET', 'POST'])
+def quadro():
+    NUMBER = 5
+    return redirect(url_for('quadro_result', number=int(NUMBER**2)))
+
+@app.route('/quadro/<int:number>')
+def quadro_result(number):
+    return f'Квадрат числа = {number}'
 
 
 if __name__ == '__main__':
