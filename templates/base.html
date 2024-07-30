@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,
+initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>
+        {% block title %}
+        Мой сайт
+        {% endblock %}
+    </title>
+</head>
+
+<body>
+    <nav>
+        <p>Задание 1</p>
+        <a href="{{ url_for('next_page')}}">Нажми меня</a>
+    
+        <p>Задание 2</p>
+        <a href="{{ url_for('load_image')}}">Загрузи изображения</a>
+
+        <p>Задание 3</p>
+        <a href="{{ url_for('authorization')}}">Авторизуйся</a>
+
+        <p>Задание 4</p>
+        <a href="{{ url_for('counter')}}">Отправить</a>
+
+    </nav>
+{% block content%}
+{% endblock %}
+
+</body>
+
+</html>
