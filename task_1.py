@@ -1,10 +1,13 @@
-from flask import Flask, render_template, request
+import logging
+from flask import Flask, render_template, request, abort
 from pathlib import PurePath, Path
 from werkzeug.utils import secure_filename
 from markupsafe import escape
 
 
+
 app = Flask(__name__)
+logger = logging.getLogger(__name__)
 
 
 @app.route('/')
@@ -70,11 +73,39 @@ def calculator():
             case 'multiply':
                 return str(int(number_1) * int(number_2))
             case 'divide':
+                if number_2 == '0':
+                    return "нельзя делить на ноль"
                 return str(int(number_1) / int(number_2))
     
     context = {'task': 'задание_5'}
 
     return render_template('calculator.html', **context)
+
+@app.route('/check_age', methods=['GET', 'POST'])
+def check_age():
+    MIN_AGE = 18
+    age = '0'
+    if request.method == 'POST':
+        name = request.form.get('name')
+        age = request.form.get('age')
+        if int(age) > MIN_AGE:
+            return f'Вы вошли под именем {name}'
+        else:
+            abort(403)
+
+            
+    context = {'task': 'задание_5'}
+
+    return render_template('check_age.html', **context)
+
+@app.errorhandler(403)
+def page_not_found(e):
+    logger.warning(e)
+    context = {
+        'title': 'Доступ запрещён', 'url': request.base_url,
+        }
+    return render_template('403.html', **context), 403
+
 
 
 if __name__ == '__main__':
