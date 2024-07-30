@@ -55,6 +55,26 @@ def counter():
 
     return render_template('counter.html', **context)
 
+@app.route('/calculator', methods=['GET', 'POST'])
+def calculator():
+    if request.method == 'POST':
+        number_1 = request.form.get('number_1')
+        number_2 = request.form.get('number_2')
+        operation = request.form.get('operation')
+
+        match operation:
+            case 'add':
+                return str(int(number_1) + int(number_2))
+            case 'subtract':
+                return str(int(number_1) - int(number_2))
+            case 'multiply':
+                return str(int(number_1) * int(number_2))
+            case 'divide':
+                return str(int(number_1) / int(number_2))
+    
+    context = {'task': 'задание_5'}
+
+    return render_template('calculator.html', **context)
 
 
 if __name__ == '__main__':
